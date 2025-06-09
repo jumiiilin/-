@@ -1,0 +1,25 @@
+import pandas as pd
+
+def group_subway_timezones(df_subway):
+    """
+    서울교통공사 지하철 시간대 데이터를 상권 시간대 구간(6개)으로 그룹화하여 반환합니다.
+    """
+    # 상권 시간대 기준에 맞게 지하철 시간대 컬럼 그룹 정의
+    subway_time_columns = {
+        "시간대_00~06": ["06시 이전"],
+        "시간대_06~11": ["06시-07시", "07시-08시", "08시-09시", "09시-10시", "10시-11시"],
+        "시간대_11~14": ["11시-12시", "12시-13시", "13시-14시"],
+        "시간대_14~17": ["14시-15시", "15시-16시", "16시-17시"],
+        "시간대_17~21": ["17시-18시", "18시-19시", "19시-20시", "20시-21시"],
+        "시간대_21~24": ["21시-22시", "22시-23시", "23시-24시"],
+    }
+
+    df_grouped = df_subway.copy()
+
+    # 각 시간대 그룹에 대해 합산
+    for new_col, time_range in subway_time_columns.items():
+        df_grouped[new_col] = df_grouped[time_range].sum(axis=1)
+
+    # 결과에 필요한 컬럼만 정리해서 반환
+    grouped_cols = ["날짜", "역명", "구분"] + list(subway_time_columns.keys())
+    return df_grouped[grouped_cols]
