@@ -85,9 +85,6 @@ ax.grid(True)
 
 st.pyplot(fig)
 
-streamlit
-pandas
-matplotlib
-   
+
 
 
