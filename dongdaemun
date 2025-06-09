@@ -1,0 +1,24 @@
+# "동대문역"이 포함된 상권만 필터링
+dongdaemun_sales = df_sales[df_sales['상권_코드_명'].str.contains("동대문역", na=False)]
+# "동대문역"의 유동인구 데이터만 필터링
+dongdaemun_traffic = df_traffic[df_traffic["역명"] == "동대문"]
+# 시간대별 평균 유동인구
+dongdaemun_traffic_avg = dongdaemun_traffic.mean(numeric_only=True)
+
+# 시간대별 평균 매출 (업종 구분 없이 전체 평균)
+dongdaemun_sales_avg = dongdaemun_sales[ [col for col in dongdaemun_sales.columns if "시간대_" in col and "매출_금액" in col]].mean()
+# 컬럼 이름 통일 (매출, 유동인구 모두 시간대_00~06 형식으로 정리됨)
+avg_df = pd.DataFrame({ '시간대': dongdaemun_sales_avg.index.str.replace("_매출_금액", "", regex=False),'평균_매출': dongdaemun_sales_avg.values,'평균_유동인구': dongdaemun_traffic_avg.values})
+correlation = avg_df['평균_매출'].corr(avg_df['평균_유동인구'])
+print(f"동대문역 기준 시간대별 매출 vs 유동인구 상관계수: {correlation:.4f}")
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(10, 5))
+plt.plot(avg_df['시간대'], avg_df['평균_매출'], marker='o', label='평균 매출')
+plt.plot(avg_df['시간대'], avg_df['평균_유동인구'], marker='s', label='평균 유동인구')
+plt.title('동대문역 시간대별 매출 vs 유동인구')
+plt.xlabel('시간대')
+plt.ylabel('값')
+plt.legend()
+plt.grid(True)
+plt.show()
