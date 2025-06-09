@@ -93,3 +93,4 @@ plt.ylabel('값')
 plt.legend()
 plt.grid(True)
 plt.show()
+import streamlit as st
