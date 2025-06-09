@@ -23,3 +23,5 @@ def group_subway_timezones(df_subway):
     # 결과에 필요한 컬럼만 정리해서 반환
     grouped_cols = ["날짜", "역명", "구분"] + list(subway_time_columns.keys())
     return df_grouped[grouped_cols]
+df_grouped = group_subway_timezones(df_subway)
+df_grouped.head()
