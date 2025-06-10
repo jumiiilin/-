@@ -88,7 +88,7 @@ ax.grid(True)
 
 st.pyplot(fig)
 
-streamlit run streamlit_app.py
+
 
 
 
