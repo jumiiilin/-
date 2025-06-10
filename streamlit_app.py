@@ -5,11 +5,11 @@ import matplotlib.pyplot as plt
 st.title("서울시 상권 vs 유동인구 분석")
 st.write("Streamlit 앱이 성공적으로 실행되었습니다!")
 
-# CSV 불러오기 (GitHub에 업로드한 경로 사용)
+# CSV 불러오기 (로컬 또는 GitHub 경로 사용 가능)
 @st.cache_data
 def load_data():
-    df_sales = pd.read_csv("서울시 상권분석서비스_2024년.csv", encoding='utf-8')
-    df_subway = pd.read_csv("2024 서울교통공사_역별 시간대별 승하차인원(24.1~24.12).csv", encoding='utf-8')
+    df_sales = pd.read_csv("서울시 상권분석서비스_2024년.csv", encoding='cp949')
+    df_subway = pd.read_csv("2024 서울교통공사_역별 시간대별 승하차인원(24.1~24.12).csv", encoding='cp949')
     return df_sales, df_subway
 
 df_sales, df_subway = load_data()
@@ -56,10 +56,13 @@ df_grouped = group_subway_timezones(df_subway)
 df_traffic = calculate_total_traffic(df_grouped)
 
 # 동대문 기준 분석
-dongdaemun_sales = df_sales[df_sales['상권_코드_명'].str.contains("동대문역", na=False)]
+# - "동대문"으로 정확히 일치하도록 수정
+dongdaemun_sales = df_sales[df_sales['상권_코드_명'].str.contains("동대문", na=False)]
 dongdaemun_traffic = df_traffic[df_traffic["역명"] == "동대문"]
 
+# 시간대 매출과 유동인구 평균값 계산
 dongdaemun_traffic_avg = dongdaemun_traffic.mean(numeric_only=True)
+
 dongdaemun_sales_avg = dongdaemun_sales[
     [col for col in dongdaemun_sales.columns if "시간대_" in col and "매출_금액" in col]
 ].mean()
@@ -84,6 +87,8 @@ ax.legend()
 ax.grid(True)
 
 st.pyplot(fig)
+
+
 
 
 
