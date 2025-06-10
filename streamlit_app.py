@@ -88,6 +88,9 @@ ax.grid(True)
 
 st.pyplot(fig)
 
+st.write("동대문 관련 상권 데이터 수:", dongdaemun_sales.shape)
+st.write("동대문 지하철 유동인구 데이터 수:", dongdaemun_traffic.shape)
+st.write("동대문 지하철 역 이름 목록:", df_traffic['역명'].unique())
 
 
 
